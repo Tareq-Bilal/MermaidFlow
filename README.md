@@ -33,40 +33,51 @@ src/
 
 ## API Endpoints
 
-### Documents
+```mermaid
+graph LR
+    Client(["🖥️ Client"])
 
-| Method   | Endpoint          | Description                   |
-| -------- | ----------------- | ----------------------------- |
-| `POST`   | `/Documents`      | Create a document             |
-| `GET`    | `/Documents/{id}` | Get a document by ID          |
-| `PUT`    | `/Documents/{id}` | Update a document _(planned)_ |
-| `DELETE` | `/Documents/{id}` | Delete a document _(planned)_ |
+    subgraph Auth ["🔐 Auth (planned)"]
+        A1["POST /auth/login\nLogin → JWT"]
+        A2["POST /auth/refresh\nRefresh token"]
+        A3["POST /auth/logout\nRevoke token"]
+    end
 
-### Users
+    subgraph Users ["👤 Users"]
+        U1["POST /Users\nCreate user"]
+        U2["GET /Users\nList all users"]
+        U3["GET /Users/{id}\nGet user"]
+        U4["PUT /Users/{id}\nUpdate user"]
+        U5["DELETE /Users/{id}\nDelete user"]
+    end
 
-| Method   | Endpoint      | Description     |
-| -------- | ------------- | --------------- |
-| `POST`   | `/Users`      | Register a user |
-| `GET`    | `/Users`      | List all users  |
-| `GET`    | `/Users/{id}` | Get user by ID  |
-| `PUT`    | `/Users/{id}` | Update user     |
-| `DELETE` | `/Users/{id}` | Delete user     |
+    subgraph Documents ["📄 Documents"]
+        D1["POST /Documents\nCreate document"]
+        D2["GET /Documents/{id}\nGet document"]
+        D3["PUT /Documents/{id}\nUpdate document (planned)"]
+        D4["DELETE /Documents/{id}\nDelete document (planned)"]
+    end
 
-### Auth _(planned)_
+    subgraph Mermaid ["🔷 Mermaid (planned)"]
+        M1["POST /mermaid/render\nRender → SVG"]
+        M2["POST /mermaid/validate\nValidate syntax"]
+        M3["POST /mermaid/export\nExport SVG / PNG"]
+    end
 
-| Method | Endpoint        | Description         |
-| ------ | --------------- | ------------------- |
-| `POST` | `/auth/login`   | Login → returns JWT |
-| `POST` | `/auth/refresh` | Refresh token       |
-| `POST` | `/auth/logout`  | Revoke token        |
+    Client --> A1 & A2 & A3
+    Client --> U1 & U2 & U3 & U4 & U5
+    Client --> D1 & D2 & D3 & D4
+    Client --> M1 & M2 & M3
 
-### Mermaid _(planned)_
+    A1 -- "JWT token" --> U3
+    A1 -- "JWT token" --> D1 & D2 & D3 & D4
+    A1 -- "JWT token" --> M1 & M2 & M3
 
-| Method | Endpoint            | Description               |
-| ------ | ------------------- | ------------------------- |
-| `POST` | `/mermaid/render`   | Render Mermaid code → SVG |
-| `POST` | `/mermaid/validate` | Validate Mermaid syntax   |
-| `POST` | `/mermaid/export`   | Export as SVG or PNG      |
+    U1 -- "creates" --> U3
+    D1 -- "owned by" --> U3
+    D2 -- "content fed to" --> M1
+    M1 -- "cached SVG" --> D2
+```
 
 ---
 
@@ -103,9 +114,39 @@ Update `appsettings.json` in `MermaidFlow.Api`:
 
 ## Data Models
 
-**Document** — `Id`, `Title`, `Content` (raw Markdown), `UserId` (FK), `CreatedAt`, `UpdatedAt`, `IsPublic`, `Tags`
+### `Document`
 
-**User** — `Id`, `Email` (unique), `PasswordHash` (PBKDF2/SHA-256), `DisplayName`, `CreatedAt`
+```
+- Id (Guid)
+- Title (string, required, max 200)
+- Content (string, required)  // Raw markdown
+- UserId (Guid, FK)
+- CreatedAt (DateTime)
+- UpdatedAt (DateTime)
+- IsPublic (bool)
+- Tags (List<string>)
+```
+
+### `User`
+
+```
+- Id (Guid)
+- Email (string, unique)
+- PasswordHash (string)
+- DisplayName (string)
+- CreatedAt (DateTime)
+```
+
+### `DiagramCache`
+
+```
+- Id (Guid)
+- MermaidHash (string, indexed)  // SHA256 of mermaid code
+- RenderedSvg (string)           // Cached SVG output
+- Theme (string)
+- CreatedAt (DateTime)
+- ExpiresAt (DateTime)
+```
 
 ---
 
