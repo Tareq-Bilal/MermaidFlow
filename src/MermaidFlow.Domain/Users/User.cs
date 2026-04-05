@@ -27,4 +27,14 @@ public class User
         Email = email;
         DisplayName = displayName;
     }
+
+    public void UpdateEmail(string email)
+    {
+        Email = email;
+    }
+
+    public void UpdateDisplayName(string displayName)
+    {
+        DisplayName = displayName;
+    }
 }

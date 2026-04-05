@@ -34,3 +34,4 @@ C:\Projects\MermaidFlow\src\MermaidFlow.Infrastructure\obj\Debug\net10.0\Mermaid
 C:\Projects\MermaidFlow\src\MermaidFlow.Infrastructure\obj\Debug\net10.0\ref\MermaidFlow.Infrastructure.dll
 C:\Projects\MermaidFlow\src\MermaidFlow.Infrastructure\bin\Debug\net10.0\MermaidFlow.Infrastructure.runtimeconfig.json
 C:\Projects\MermaidFlow\src\MermaidFlow.Infrastructure\obj\Debug\net10.0\MermaidFlow.Infrastructure.genruntimeconfig.cache
+C:\Projects\MermaidFlow\src\MermaidFlow.Infrastructure\obj\Debug\net10.0\MermaidFlow.Infrastructure.sourcelink.json

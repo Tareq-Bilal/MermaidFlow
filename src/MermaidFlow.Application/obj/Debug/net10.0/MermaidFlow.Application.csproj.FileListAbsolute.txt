@@ -28,3 +28,4 @@ C:\Projects\MermaidFlow\src\MermaidFlow.Application\obj\Debug\net10.0\MermaidFlo
 C:\Projects\MermaidFlow\src\MermaidFlow.Application\obj\Debug\net10.0\refint\MermaidFlow.Application.dll
 C:\Projects\MermaidFlow\src\MermaidFlow.Application\obj\Debug\net10.0\MermaidFlow.Application.pdb
 C:\Projects\MermaidFlow\src\MermaidFlow.Application\obj\Debug\net10.0\ref\MermaidFlow.Application.dll
+C:\Projects\MermaidFlow\src\MermaidFlow.Application\obj\Debug\net10.0\MermaidFlow.Application.sourcelink.json

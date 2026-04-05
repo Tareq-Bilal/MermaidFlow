@@ -20,3 +20,4 @@ C:\Projects\MermaidFlow\src\MermaidFlow.Domain\obj\Debug\net10.0\MermaidFlow.Dom
 C:\Projects\MermaidFlow\src\MermaidFlow.Domain\obj\Debug\net10.0\refint\MermaidFlow.Domain.dll
 C:\Projects\MermaidFlow\src\MermaidFlow.Domain\obj\Debug\net10.0\MermaidFlow.Domain.pdb
 C:\Projects\MermaidFlow\src\MermaidFlow.Domain\obj\Debug\net10.0\ref\MermaidFlow.Domain.dll
+C:\Projects\MermaidFlow\src\MermaidFlow.Domain\obj\Debug\net10.0\MermaidFlow.Domain.sourcelink.json
