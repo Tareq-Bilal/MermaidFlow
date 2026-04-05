@@ -6,4 +6,6 @@ public interface IDocumentsRepository
 {
     Task AddDocumentAsync(Document document);
     Task<Document?> GetByIdAsync(Guid id);
+    Task<List<Document>> GetAllAsync();
+    void Remove(Document document);
 }

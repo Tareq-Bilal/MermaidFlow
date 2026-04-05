@@ -23,4 +23,14 @@ public class DocumentsRepository : IDocumentsRepository
     {
         return await _dbContext.Documents.FirstOrDefaultAsync(d => d.Id == id);
     }
+
+    public async Task<List<Document>> GetAllAsync()
+    {
+        return await _dbContext.Documents.ToListAsync();
+    }
+
+    public void Remove(Document document)
+    {
+        _dbContext.Documents.Remove(document);
+    }
 }

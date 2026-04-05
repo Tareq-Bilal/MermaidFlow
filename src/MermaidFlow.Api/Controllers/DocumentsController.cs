@@ -1,5 +1,8 @@
 using MermaidFlow.Application.Documents.Commands.CreateDocument;
+using MermaidFlow.Application.Documents.Commands.UpdateDocument;
+using MermaidFlow.Application.Documents.Commands.DeleteDocument;
 using MermaidFlow.Application.Documents.Queries.GetDocument;
+using MermaidFlow.Application.Documents.Queries.GetDocuments;
 using MermaidFlow.Contracts.Documents;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +33,7 @@ public class DocumentsController : ControllerBase
         var result = await _mediator.Send(command);
 
         return result.MatchFirst(
-            document => Ok(ToResponse(document)),
+            document => CreatedAtAction(nameof(GetDocument), new { id = document.Id }, ToResponse(document)),
             error => Problem());
     }
 
@@ -43,6 +46,43 @@ public class DocumentsController : ControllerBase
 
         return result.MatchFirst(
             document => Ok(ToResponse(document)),
+            error => Problem(statusCode: StatusCodes.Status404NotFound, detail: error.Description));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetDocuments()
+    {
+        var result = await _mediator.Send(new GetDocumentsQuery());
+
+        return result.MatchFirst(
+            documents => Ok(documents.Select(ToResponse).ToList()),
+            error => Problem());
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateDocument(Guid id, UpdateDocumentRequest request)
+    {
+        var command = new UpdateDocumentCommand(
+            id,
+            request.Title,
+            request.Content,
+            request.IsPublic,
+            request.Tags);
+
+        var result = await _mediator.Send(command);
+
+        return result.MatchFirst(
+            document => Ok(ToResponse(document)),
+            error => Problem(statusCode: StatusCodes.Status404NotFound, detail: error.Description));
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteDocument(Guid id)
+    {
+        var result = await _mediator.Send(new DeleteDocumentCommand(id));
+
+        return result.MatchFirst<IActionResult>(
+            _ => NoContent(),
             error => Problem(statusCode: StatusCodes.Status404NotFound, detail: error.Description));
     }
 
