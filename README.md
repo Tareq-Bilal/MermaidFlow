@@ -6,15 +6,15 @@ A .NET backend for creating, managing, and rendering Mermaid diagram documents. 
 
 ## Tech Stack
 
-| Layer          | Technology                               |
-| -------------- | ---------------------------------------- |
-| Framework      | ASP.NET Core 10 (Web API)                |
-| Architecture   | Clean Architecture + CQRS (MediatR)      |
-| ORM            | Entity Framework Core 9 (SQL Server)     |
-| Authentication | JWT Bearer _(planned)_                   |
-| Rendering      | PuppeteerSharp / Mermaid CLI _(planned)_ |
-| Validation     | FluentValidation _(planned)_             |
-| API Docs       | Scalar (OpenAPI)                         |
+| Layer          | Technology                              |
+| -------------- | --------------------------------------- |
+| Framework      | ASP.NET Core 10 (Web API)               |
+| Architecture   | Clean Architecture + CQRS (MediatR)     |
+| ORM            | Entity Framework Core 9 (SQL Server)    |
+| Authentication | JWT Bearer*(planned)*                   |
+| Rendering      | PuppeteerSharp / Mermaid CLI*(planned)* |
+| Validation     | FluentValidation*(planned)*             |
+| API Docs       | Scalar (OpenAPI)                        |
 
 ---
 
@@ -97,20 +97,6 @@ dotnet ef database update --project src/MermaidFlow.Infrastructure --startup-pro
 # Start the API
 dotnet run --project src/MermaidFlow.Api --urls "http://localhost:5209"
 ```
-
-Open **http://localhost:5209/scalar/v1** for the interactive API explorer.
-
-### Connection String
-
-Update `appsettings.json` in `MermaidFlow.Api`:
-
-```json
-"ConnectionStrings": {
-  "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=MermaidFlowDb;Trusted_Connection=True;"
-}
-```
-
----
 
 ## Data Models
 
