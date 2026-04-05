@@ -1,9 +1,0 @@
-@host=http://localhost:5209
-
-POST {{host}}/Documents
-Content-Type: application/json
-
-{
-    "Name": "Example",
-    "OwnerId": "2150e333-8fdc-42a3-9474-1a3956d46de8"
-}
