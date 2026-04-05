@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MermaidFlow.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fb534655cb96b0366538f2f902f5b0fc69445b54")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b1e5ffeb03de9d0a4f2964f83e1d17d54996caa")]
 [assembly: System.Reflection.AssemblyProductAttribute("MermaidFlow.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MermaidFlow.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
