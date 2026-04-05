@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{066B5515-2273-4C8A-A971-4A025A983660}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MermaidFlow.Api", "src\MermaidFlow.Api\MermaidFlow.Api.csproj", "{D2880A06-9D06-40B8-8DC1-E6F2FB69A424}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MermaidFlow.Application", "src\MermaidFlow.Application\MermaidFlow.Application.csproj", "{C50F1C61-F67C-4347-AD36-7BB637FF6A2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MermaidFlow.Domain", "src\MermaidFlow.Domain\MermaidFlow.Domain.csproj", "{EB13A603-6568-47D0-A102-7550BA590E70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MermaidFlow.Infrastructure", "src\MermaidFlow.Infrastructure\MermaidFlow.Infrastructure.csproj", "{3A767092-B4AB-466E-BC65-CD7C7D4F6BDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MermaidFlow.Contracts", "src\MermaidFlow.Contracts\MermaidFlow.Contracts.csproj", "{E79B21FC-C73F-4FCD-A4C3-25E028A34C9E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2880A06-9D06-40B8-8DC1-E6F2FB69A424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2880A06-9D06-40B8-8DC1-E6F2FB69A424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2880A06-9D06-40B8-8DC1-E6F2FB69A424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2880A06-9D06-40B8-8DC1-E6F2FB69A424}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C50F1C61-F67C-4347-AD36-7BB637FF6A2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C50F1C61-F67C-4347-AD36-7BB637FF6A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C50F1C61-F67C-4347-AD36-7BB637FF6A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C50F1C61-F67C-4347-AD36-7BB637FF6A2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB13A603-6568-47D0-A102-7550BA590E70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB13A603-6568-47D0-A102-7550BA590E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB13A603-6568-47D0-A102-7550BA590E70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB13A603-6568-47D0-A102-7550BA590E70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A767092-B4AB-466E-BC65-CD7C7D4F6BDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A767092-B4AB-466E-BC65-CD7C7D4F6BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A767092-B4AB-466E-BC65-CD7C7D4F6BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A767092-B4AB-466E-BC65-CD7C7D4F6BDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E79B21FC-C73F-4FCD-A4C3-25E028A34C9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E79B21FC-C73F-4FCD-A4C3-25E028A34C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E79B21FC-C73F-4FCD-A4C3-25E028A34C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E79B21FC-C73F-4FCD-A4C3-25E028A34C9E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D2880A06-9D06-40B8-8DC1-E6F2FB69A424} = {066B5515-2273-4C8A-A971-4A025A983660}
+		{C50F1C61-F67C-4347-AD36-7BB637FF6A2C} = {066B5515-2273-4C8A-A971-4A025A983660}
+		{EB13A603-6568-47D0-A102-7550BA590E70} = {066B5515-2273-4C8A-A971-4A025A983660}
+		{3A767092-B4AB-466E-BC65-CD7C7D4F6BDA} = {066B5515-2273-4C8A-A971-4A025A983660}
+		{E79B21FC-C73F-4FCD-A4C3-25E028A34C9E} = {066B5515-2273-4C8A-A971-4A025A983660}
+	EndGlobalSection
+EndGlobal

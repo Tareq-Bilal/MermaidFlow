@@ -1,0 +1,11 @@
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\bin\Debug\net10.0\MermaidFlow.Contracts.deps.json
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\bin\Debug\net10.0\MermaidFlow.Contracts.dll
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\bin\Debug\net10.0\MermaidFlow.Contracts.pdb
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\obj\Debug\net10.0\MermaidFlow.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\obj\Debug\net10.0\MermaidFlow.Contracts.AssemblyInfoInputs.cache
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\obj\Debug\net10.0\MermaidFlow.Contracts.AssemblyInfo.cs
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\obj\Debug\net10.0\MermaidFlow.Contracts.csproj.CoreCompileInputs.cache
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\obj\Debug\net10.0\MermaidFlow.Contracts.dll
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\obj\Debug\net10.0\refint\MermaidFlow.Contracts.dll
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\obj\Debug\net10.0\MermaidFlow.Contracts.pdb
+C:\Users\Vip\Desktop\Projects\MermaidFlow\src\MermaidFlow.Contracts\obj\Debug\net10.0\ref\MermaidFlow.Contracts.dll
