@@ -2,6 +2,7 @@ using MermaidFlow.Application.Common.Interfaces;
 using MermaidFlow.Infrastructure.Common.Persistence;
 using MermaidFlow.Infrastructure.Common.Security;
 using MermaidFlow.Infrastructure.Documents;
+using MermaidFlow.Infrastructure.Mermaid;
 using MermaidFlow.Infrastructure.Persistence;
 using MermaidFlow.Infrastructure.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,6 +26,8 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddSingleton<PuppeteerSharpMermaidRenderer>();
+        services.AddSingleton<IMermaidRenderer>(sp => sp.GetRequiredService<PuppeteerSharpMermaidRenderer>());
 
         var jwtSettings = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()!;
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
