@@ -8,7 +8,7 @@ A .NET backend for creating, managing, and rendering Mermaid diagram documents. 
 
 | Layer          | Technology                              |
 | -------------- | --------------------------------------- |
-| Framework      | ASP.NET Core 10 (Web API)               |
+| Framework      | ASP.NET Core 10 (Web API)               |
 | Architecture   | Clean Architecture + CQRS (MediatR)     |
 | ORM            | Entity Framework Core 9 (SQL Server)    |
 | Authentication | JWT Bearer*(planned)*                   |
