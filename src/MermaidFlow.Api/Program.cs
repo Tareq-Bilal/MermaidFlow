@@ -1,3 +1,4 @@
+using MermaidFlow.Api.Middleware;
 using MermaidFlow.Application;
 using MermaidFlow.Infrastructure;
 using Scalar.AspNetCore;
@@ -20,6 +21,7 @@ var app = builder.Build();
         app.MapScalarApiReference();
     }
 
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
     app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();

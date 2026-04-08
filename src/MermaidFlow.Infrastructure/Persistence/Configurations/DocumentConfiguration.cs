@@ -1,5 +1,6 @@
 using System.Text.Json;
 using MermaidFlow.Domain.Documents;
+using MermaidFlow.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -20,6 +21,11 @@ public class DocumentConfiguration : IEntityTypeConfiguration<Document>
 
         builder.Property(d => d.UserId)
             .IsRequired();
+
+        builder.HasOne(d => d.User)
+            .WithMany()
+            .HasForeignKey(d => d.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(d => d.CreatedAt)
             .IsRequired();

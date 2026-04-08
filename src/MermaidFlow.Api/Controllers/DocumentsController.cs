@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using MermaidFlow.Application.Documents.Commands.CreateDocument;
 using MermaidFlow.Application.Documents.Commands.UpdateDocument;
 using MermaidFlow.Application.Documents.Commands.DeleteDocument;
@@ -23,10 +24,12 @@ public class DocumentsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateDocument(CreateDocumentRequest request)
     {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
         var command = new CreateDocumentCommand(
             request.Title,
             request.Content,
-            request.UserId,
+            userId,
             request.IsPublic,
             request.Tags);
 
@@ -52,7 +55,9 @@ public class DocumentsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetDocuments()
     {
-        var result = await _mediator.Send(new GetDocumentsQuery());
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        var result = await _mediator.Send(new GetDocumentsQuery(userId));
 
         return result.MatchFirst(
             documents => Ok(documents.Select(ToResponse).ToList()),

@@ -16,6 +16,6 @@ public class GetDocumentsQueryHandler : IRequestHandler<GetDocumentsQuery, Error
 
     public async Task<ErrorOr<List<Document>>> Handle(GetDocumentsQuery request, CancellationToken cancellationToken)
     {
-        return await _documentsRepository.GetAllAsync();
+        return await _documentsRepository.GetByUserIdAsync(request.UserId);
     }
 }

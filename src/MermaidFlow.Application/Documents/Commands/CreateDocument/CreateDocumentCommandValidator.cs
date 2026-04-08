@@ -13,9 +13,6 @@ public class CreateDocumentCommandValidator : AbstractValidator<CreateDocumentCo
         RuleFor(x => x.Content)
             .NotEmpty();
 
-        RuleFor(x => x.UserId)
-            .NotEmpty();
-
         RuleFor(x => x.Tags)
             .NotNull();
 

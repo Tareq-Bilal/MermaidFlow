@@ -1,3 +1,5 @@
+using MermaidFlow.Domain.Users;
+
 namespace MermaidFlow.Domain.Documents;
 
 public class Document
@@ -6,6 +8,7 @@ public class Document
     public string Title { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
     public Guid UserId { get; set; }
+    public User User { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public bool IsPublic { get; set; }

@@ -29,6 +29,13 @@ public class DocumentsRepository : IDocumentsRepository
         return await _dbContext.Documents.ToListAsync();
     }
 
+    public async Task<List<Document>> GetByUserIdAsync(Guid userId)
+    {
+        return await _dbContext.Documents
+            .Where(d => d.UserId == userId)
+            .ToListAsync();
+    }
+
     public void Remove(Document document)
     {
         _dbContext.Documents.Remove(document);
