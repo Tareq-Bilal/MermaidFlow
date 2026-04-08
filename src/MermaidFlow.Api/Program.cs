@@ -1,6 +1,7 @@
 using MermaidFlow.Api.Middleware;
 using MermaidFlow.Application;
 using MermaidFlow.Infrastructure;
+using MermaidFlow.Infrastructure.Mermaid;
 using Scalar.AspNetCore;
 using Serilog;
 
@@ -48,6 +49,12 @@ var app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
+
+    app.Lifetime.ApplicationStopping.Register(() =>
+    {
+        var pool = app.Services.GetService<PlaywrightPagePool>();
+        pool?.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(10));
+    });
 
     app.Run();
 }

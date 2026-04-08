@@ -26,8 +26,8 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
-        services.AddSingleton<PuppeteerSharpMermaidRenderer>();
-        services.AddSingleton<IMermaidRenderer>(sp => sp.GetRequiredService<PuppeteerSharpMermaidRenderer>());
+
+        services.AddMermaidRenderer(configuration);
 
         var jwtSettings = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()!;
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
@@ -53,6 +53,26 @@ public static class DependencyInjection
             .SetFallbackPolicy(new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build());
+
+        return services;
+    }
+
+    private static IServiceCollection AddMermaidRenderer(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.Configure<MermaidRendererOptions>(
+            configuration.GetSection(MermaidRendererOptions.SectionName));
+
+        services.AddSingleton(sp =>
+        {
+            var options = sp.GetRequiredService<
+                Microsoft.Extensions.Options.IOptions<MermaidRendererOptions>>().Value;
+
+            return PlaywrightPagePool.CreateAsync(options).GetAwaiter().GetResult();
+        });
+
+        services.AddScoped<IMermaidRenderer, PlaywrightMermaidRenderer>();
 
         return services;
     }
