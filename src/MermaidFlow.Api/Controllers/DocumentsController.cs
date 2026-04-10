@@ -4,6 +4,7 @@ using MermaidFlow.Application.Documents.Commands.UpdateDocument;
 using MermaidFlow.Application.Documents.Commands.DeleteDocument;
 using MermaidFlow.Application.Documents.Queries.GetDocument;
 using MermaidFlow.Application.Documents.Queries.GetDocuments;
+using MermaidFlow.Application.Common.Helpers;
 using MermaidFlow.Contracts.Documents;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -92,6 +93,6 @@ public class DocumentsController : ControllerBase
     }
 
     private static DocumentResponse ToResponse(MermaidFlow.Domain.Documents.Document document) =>
-        new(document.Id, document.Title, document.Content, document.UserId,
+        new(document.Id, document.Title, MermaidContentFormatter.Format(document.Content), document.UserId,
             document.CreatedAt, document.UpdatedAt, document.IsPublic, document.Tags);
 }

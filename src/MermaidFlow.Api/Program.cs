@@ -2,7 +2,6 @@ using MermaidFlow.Api.Middleware;
 using MermaidFlow.Application;
 using MermaidFlow.Infrastructure;
 using MermaidFlow.Infrastructure.Mermaid;
-using Scalar.AspNetCore;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -40,7 +39,10 @@ var app = builder.Build();
     if (app.Environment.IsDevelopment())
     {
         app.MapOpenApi().AllowAnonymous();
-        app.MapScalarApiReference().AllowAnonymous();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/openapi/v1.json", "MermaidFlow API");
+        });
     }
 
     app.UseMiddleware<ExceptionHandlingMiddleware>();
