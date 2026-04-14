@@ -1,3 +1,4 @@
+using System.Text;
 using MermaidFlow.Application.Mermaid.Commands.RenderMermaid;
 using MermaidFlow.Application.Mermaid.Queries.ValidateMermaid;
 using MermaidFlow.Contracts.Mermaid;
@@ -24,8 +25,8 @@ public class MermaidController : ControllerBase
 
         var result = await _mediator.Send(command);
 
-        return result.MatchFirst(
-            svg => Ok(new MermaidRenderResponse(svg)),
+        return result.MatchFirst<IActionResult>(
+            svg => File(Encoding.UTF8.GetBytes(svg), "image/svg+xml"),
             error => Problem(statusCode: StatusCodes.Status400BadRequest, detail: error.Description));
     }
 

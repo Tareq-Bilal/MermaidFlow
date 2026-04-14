@@ -68,7 +68,7 @@ public sealed class PlaywrightMermaidRenderer : IMermaidRenderer
                 throw new InvalidOperationException("Mermaid rendering produced no SVG output.");
             }
 
-            return svg;
+            return SvgCleaner.Clean(svg);
         }
         finally
         {
