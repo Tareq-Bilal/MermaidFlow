@@ -19,6 +19,7 @@ public class MermaidController : ControllerBase
     }
 
     [HttpPost("render")]
+    [Consumes("application/json")]
     public async Task<IActionResult> Render(RenderMermaidRequest request)
     {
         var command = new RenderMermaidCommand(request.Code, request.Theme);
@@ -30,10 +31,39 @@ public class MermaidController : ControllerBase
             error => Problem(statusCode: StatusCodes.Status400BadRequest, detail: error.Description));
     }
 
+    [HttpPost("render")]
+    [Consumes("text/plain")]
+    public async Task<IActionResult> RenderFromText(
+        [FromBody] string code,
+        [FromQuery] string theme = "default")
+    {
+        var command = new RenderMermaidCommand(code, theme);
+
+        var result = await _mediator.Send(command);
+
+        return result.MatchFirst<IActionResult>(
+            svg => File(Encoding.UTF8.GetBytes(svg), "image/svg+xml"),
+            error => Problem(statusCode: StatusCodes.Status400BadRequest, detail: error.Description));
+    }
+
     [HttpPost("validate")]
+    [Consumes("application/json")]
     public async Task<IActionResult> Validate(ValidateMermaidRequest request)
     {
         var query = new ValidateMermaidQuery(request.Code);
+
+        var result = await _mediator.Send(query);
+
+        return result.MatchFirst(
+            validation => Ok(new MermaidValidationResponse(validation.IsValid, validation.ErrorMessage)),
+            error => Problem(statusCode: StatusCodes.Status400BadRequest, detail: error.Description));
+    }
+
+    [HttpPost("validate")]
+    [Consumes("text/plain")]
+    public async Task<IActionResult> ValidateFromText([FromBody] string code)
+    {
+        var query = new ValidateMermaidQuery(code);
 
         var result = await _mediator.Send(query);
 

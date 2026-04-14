@@ -1,3 +1,4 @@
+using MermaidFlow.Api.Formatters;
 using MermaidFlow.Api.Middleware;
 using MermaidFlow.Application;
 using MermaidFlow.Infrastructure;
@@ -26,7 +27,10 @@ var builder = WebApplication.CreateBuilder(args);
                 retainedFileCountLimit: 7);
     });
 
-    builder.Services.AddControllers();
+    builder.Services.AddControllers(options =>
+    {
+        options.InputFormatters.Add(new TextPlainInputFormatter());
+    });
     builder.Services.AddOpenApi();
 
     builder.Services
