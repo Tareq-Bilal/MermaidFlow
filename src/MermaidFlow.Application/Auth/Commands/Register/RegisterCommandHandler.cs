@@ -1,5 +1,7 @@
 using ErrorOr;
+using MermaidFlow.Application.Common.Helpers;
 using MermaidFlow.Application.Common.Interfaces;
+using MermaidFlow.Domain.Auth;
 using MermaidFlow.Domain.Users;
 using MediatR;
 
@@ -11,17 +13,20 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
 
     public RegisterCommandHandler(
         IUsersRepository usersRepository,
         IUnitOfWork unitOfWork,
         IPasswordHasher passwordHasher,
-        IJwtTokenGenerator jwtTokenGenerator)
+        IJwtTokenGenerator jwtTokenGenerator,
+        IRefreshTokenRepository refreshTokenRepository)
     {
         _usersRepository = usersRepository;
         _unitOfWork = unitOfWork;
         _passwordHasher = passwordHasher;
         _jwtTokenGenerator = jwtTokenGenerator;
+        _refreshTokenRepository = refreshTokenRepository;
     }
 
     public async Task<ErrorOr<AuthResult>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -37,8 +42,17 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
             request.DisplayName);
 
         await _usersRepository.AddAsync(user);
+
+        var authResult = _jwtTokenGenerator.GenerateToken(user);
+
+        var refreshToken = RefreshToken.Create(
+            user.Id,
+            HashHelper.ComputeSha256(authResult.RefreshToken),
+            authResult.RefreshTokenExpiresAt);
+
+        await _refreshTokenRepository.AddAsync(refreshToken);
         await _unitOfWork.CommitChangesAsync();
 
-        return _jwtTokenGenerator.GenerateToken(user);
+        return authResult;
     }
 }

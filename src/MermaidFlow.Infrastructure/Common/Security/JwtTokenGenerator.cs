@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using MermaidFlow.Application.Auth;
 using MermaidFlow.Application.Common.Interfaces;
@@ -41,11 +42,22 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             expires: expiresAt,
             signingCredentials: signingCredentials);
 
+        var refreshToken = GenerateRefreshToken();
+        var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpiryDays);
+
         return new AuthResult(
             Token: new JwtSecurityTokenHandler().WriteToken(token),
+            RefreshToken: refreshToken,
             UserId: user.Id,
             Email: user.Email,
             DisplayName: user.DisplayName,
-            ExpiresAt: expiresAt);
+            ExpiresAt: expiresAt,
+            RefreshTokenExpiresAt: refreshTokenExpiresAt);
+    }
+
+    private static string GenerateRefreshToken()
+    {
+        var randomBytes = RandomNumberGenerator.GetBytes(32);
+        return Convert.ToBase64String(randomBytes);
     }
 }
