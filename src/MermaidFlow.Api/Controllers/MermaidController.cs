@@ -1,4 +1,6 @@
 using System.Text;
+using MermaidFlow.Application.Mermaid;
+using MermaidFlow.Application.Mermaid.Commands.ExportMermaid;
 using MermaidFlow.Application.Mermaid.Commands.RenderMermaid;
 using MermaidFlow.Application.Mermaid.Queries.ValidateMermaid;
 using MermaidFlow.Contracts.Mermaid;
@@ -70,5 +72,23 @@ public class MermaidController : ControllerBase
         return result.MatchFirst(
             validation => Ok(new MermaidValidationResponse(validation.IsValid, validation.ErrorMessage)),
             error => Problem(statusCode: StatusCodes.Status400BadRequest, detail: error.Description));
+    }
+
+    [HttpPost("export")]
+    public async Task<IActionResult> Export(ExportMermaidRequest request)
+    {
+        var command = new ExportMermaidCommand(request.Code, request.Theme, request.Format);
+
+        var result = await _mediator.Send(command);
+
+        return result.MatchFirst<IActionResult>(
+            export => File(export.Data, export.ContentType, export.FileName),
+            error => Problem(statusCode: StatusCodes.Status400BadRequest, detail: error.Description));
+    }
+
+    [HttpGet("themes")]
+    public IActionResult GetThemes()
+    {
+        return Ok(MermaidConstants.AllowedThemes);
     }
 }

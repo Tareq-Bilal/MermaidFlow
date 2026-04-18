@@ -127,6 +127,62 @@ public sealed class PlaywrightMermaidRenderer : IMermaidRenderer
         }
     }
 
+    public async Task<byte[]> RenderToPngAsync(string mermaidCode, string theme)
+    {
+        var page = await _pool.BorrowAsync();
+
+        try
+        {
+            var escaped = EscapeForJs(mermaidCode);
+
+            await page.EvaluateAsync($$"""
+                (() => {
+                    mermaid.initialize({ startOnLoad: false, theme: '{{theme}}', securityLevel: 'strict' });
+                    document.body.innerHTML = '<div id="output"></div>';
+                })();
+                """);
+
+            await page.EvaluateAsync($$"""
+                (async () => {
+                    try {
+                        const { svg } = await mermaid.render('mermaid-diagram-png', `{{escaped}}`);
+                        document.getElementById('output').innerHTML = svg;
+                        window.__renderDone = true;
+                        window.__renderError = '';
+                    } catch (e) {
+                        window.__renderDone = true;
+                        window.__renderError = e.message || String(e);
+                    }
+                })();
+                """);
+
+            await page.WaitForFunctionAsync(
+                "() => window.__renderDone === true",
+                null,
+                new PageWaitForFunctionOptions { Timeout = _options.RenderTimeoutMs });
+
+            var errorText = await page.EvaluateAsync<string>("window.__renderError || ''");
+
+            if (!string.IsNullOrWhiteSpace(errorText))
+            {
+                throw new InvalidOperationException($"Mermaid rendering failed: {errorText}");
+            }
+
+            var element = await page.QuerySelectorAsync("#output svg")
+                ?? throw new InvalidOperationException("Mermaid rendering produced no SVG output.");
+
+            return await element.ScreenshotAsync(new ElementHandleScreenshotOptions
+            {
+                Type = ScreenshotType.Png,
+            });
+        }
+        finally
+        {
+            await CleanUpPageAsync(page);
+            await _pool.ReturnAsync(page);
+        }
+    }
+
     private static async Task CleanUpPageAsync(IPage page)
     {
         await page.EvaluateAsync("""
