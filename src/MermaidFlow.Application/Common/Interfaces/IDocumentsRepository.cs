@@ -8,5 +8,6 @@ public interface IDocumentsRepository
     Task<Document?> GetByIdAsync(Guid id);
     Task<List<Document>> GetAllAsync();
     Task<List<Document>> GetByUserIdAsync(Guid userId);
+    Task<List<Document>> GetPublicDocumentsAsync();
     void Remove(Document document);
 }

@@ -36,6 +36,14 @@ public class DocumentsRepository : IDocumentsRepository
             .ToListAsync();
     }
 
+    public async Task<List<Document>> GetPublicDocumentsAsync()
+    {
+        return await _dbContext.Documents
+            .Where(d => d.IsPublic)
+            .OrderByDescending(d => d.UpdatedAt)
+            .ToListAsync();
+    }
+
     public void Remove(Document document)
     {
         _dbContext.Documents.Remove(document);
