@@ -75,9 +75,26 @@ public class MermaidController : ControllerBase
     }
 
     [HttpPost("export")]
+    [Consumes("application/json")]
     public async Task<IActionResult> Export(ExportMermaidRequest request)
     {
         var command = new ExportMermaidCommand(request.Code, request.Theme, request.Format);
+
+        var result = await _mediator.Send(command);
+
+        return result.MatchFirst<IActionResult>(
+            export => File(export.Data, export.ContentType, export.FileName),
+            error => Problem(statusCode: StatusCodes.Status400BadRequest, detail: error.Description));
+    }
+
+    [HttpPost("export")]
+    [Consumes("text/plain")]
+    public async Task<IActionResult> ExportFromText(
+        [FromBody] string code,
+        [FromQuery] string theme = "default",
+        [FromQuery] string format = "svg")
+    {
+        var command = new ExportMermaidCommand(code, theme, format);
 
         var result = await _mediator.Send(command);
 
