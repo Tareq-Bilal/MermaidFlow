@@ -3,4 +3,4 @@ using MediatR;
 
 namespace MermaidFlow.Application.Documents.Commands.DeleteDocument;
 
-public record DeleteDocumentCommand(Guid Id) : IRequest<ErrorOr<Deleted>>;
+public record DeleteDocumentCommand(Guid Id, Guid RequestingUserId) : IRequest<ErrorOr<Deleted>>;

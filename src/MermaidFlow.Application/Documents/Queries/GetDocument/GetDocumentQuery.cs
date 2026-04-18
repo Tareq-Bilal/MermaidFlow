@@ -4,4 +4,4 @@ using MediatR;
 
 namespace MermaidFlow.Application.Documents.Queries.GetDocument;
 
-public record GetDocumentQuery(Guid Id) : IRequest<ErrorOr<Document>>;
+public record GetDocumentQuery(Guid Id, Guid RequestingUserId) : IRequest<ErrorOr<Document>>;

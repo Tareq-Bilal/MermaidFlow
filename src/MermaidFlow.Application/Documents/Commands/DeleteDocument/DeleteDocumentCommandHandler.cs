@@ -24,6 +24,11 @@ public class DeleteDocumentCommandHandler : IRequestHandler<DeleteDocumentComman
             return Error.NotFound(description: "Document not found.");
         }
 
+        if (document.UserId != request.RequestingUserId)
+        {
+            return Error.Forbidden(description: "You do not have permission to delete this document.");
+        }
+
         _documentsRepository.Remove(document);
         await _unitOfWork.CommitChangesAsync();
 

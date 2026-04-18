@@ -44,13 +44,16 @@ public class DocumentsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetDocument(Guid id)
     {
-        var query = new GetDocumentQuery(id);
+        var requestingUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetDocumentQuery(id, requestingUserId);
 
         var result = await _mediator.Send(query);
 
         return result.MatchFirst(
             document => Ok(ToResponse(document)),
-            error => Problem(statusCode: StatusCodes.Status404NotFound, detail: error.Description));
+            error => error.Type == ErrorOr.ErrorType.Forbidden
+                ? Problem(statusCode: StatusCodes.Status403Forbidden, detail: error.Description)
+                : Problem(statusCode: StatusCodes.Status404NotFound, detail: error.Description));
     }
 
     [HttpGet]
@@ -68,8 +71,11 @@ public class DocumentsController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateDocument(Guid id, UpdateDocumentRequest request)
     {
+        var requestingUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
         var command = new UpdateDocumentCommand(
             id,
+            requestingUserId,
             request.Title,
             request.Content,
             request.IsPublic,
@@ -79,17 +85,23 @@ public class DocumentsController : ControllerBase
 
         return result.MatchFirst(
             document => Ok(ToResponse(document)),
-            error => Problem(statusCode: StatusCodes.Status404NotFound, detail: error.Description));
+            error => error.Type == ErrorOr.ErrorType.Forbidden
+                ? Problem(statusCode: StatusCodes.Status403Forbidden, detail: error.Description)
+                : Problem(statusCode: StatusCodes.Status404NotFound, detail: error.Description));
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteDocument(Guid id)
     {
-        var result = await _mediator.Send(new DeleteDocumentCommand(id));
+        var requestingUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        var result = await _mediator.Send(new DeleteDocumentCommand(id, requestingUserId));
 
         return result.MatchFirst<IActionResult>(
             _ => NoContent(),
-            error => Problem(statusCode: StatusCodes.Status404NotFound, detail: error.Description));
+            error => error.Type == ErrorOr.ErrorType.Forbidden
+                ? Problem(statusCode: StatusCodes.Status403Forbidden, detail: error.Description)
+                : Problem(statusCode: StatusCodes.Status404NotFound, detail: error.Description));
     }
 
     private static DocumentResponse ToResponse(MermaidFlow.Domain.Documents.Document document) =>

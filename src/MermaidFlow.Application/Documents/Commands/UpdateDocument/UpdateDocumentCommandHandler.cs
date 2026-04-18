@@ -25,6 +25,11 @@ public class UpdateDocumentCommandHandler : IRequestHandler<UpdateDocumentComman
             return Error.NotFound(description: "Document not found.");
         }
 
+        if (document.UserId != request.RequestingUserId)
+        {
+            return Error.Forbidden(description: "You do not have permission to update this document.");
+        }
+
         document.Title = request.Title;
         document.Content = request.Content;
         document.IsPublic = request.IsPublic;

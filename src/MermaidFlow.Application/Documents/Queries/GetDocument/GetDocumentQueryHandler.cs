@@ -23,6 +23,11 @@ public class GetDocumentQueryHandler : IRequestHandler<GetDocumentQuery, ErrorOr
             return Error.NotFound(description: "Document not found.");
         }
 
+        if (!document.IsPublic && document.UserId != request.RequestingUserId)
+        {
+            return Error.Forbidden(description: "You do not have access to this document.");
+        }
+
         return document;
     }
 }

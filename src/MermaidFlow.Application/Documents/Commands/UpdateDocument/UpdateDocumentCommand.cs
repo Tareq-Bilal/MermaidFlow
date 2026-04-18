@@ -6,6 +6,7 @@ namespace MermaidFlow.Application.Documents.Commands.UpdateDocument;
 
 public record UpdateDocumentCommand(
     Guid Id,
+    Guid RequestingUserId,
     string Title,
     string Content,
     bool IsPublic,
