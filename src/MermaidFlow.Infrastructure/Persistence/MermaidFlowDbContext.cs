@@ -1,4 +1,6 @@
+using MermaidFlow.Domain.Auth;
 using MermaidFlow.Domain.Documents;
+using MermaidFlow.Domain.Mermaid;
 using MermaidFlow.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +15,8 @@ public class MermaidFlowDbContext : DbContext
 
     public DbSet<Document> Documents { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<DiagramCache> DiagramCaches { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

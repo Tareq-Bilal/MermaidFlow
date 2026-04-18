@@ -1,4 +1,5 @@
 using MermaidFlow.Application.Common.Interfaces;
+using MermaidFlow.Infrastructure.Auth;
 using MermaidFlow.Infrastructure.Common.Persistence;
 using MermaidFlow.Infrastructure.Common.Security;
 using MermaidFlow.Infrastructure.Documents;
@@ -23,6 +24,9 @@ public static class DependencyInjection
 
         services.AddScoped<IDocumentsRepository, DocumentsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<IDiagramCacheRepository, DiagramCacheRepository>();
+        services.AddScoped<IDocumentExporter, MarkdigDocumentExporter>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
