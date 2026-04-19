@@ -8,12 +8,12 @@ A .NET backend for creating, managing, and rendering Mermaid diagram documents. 
 
 | Layer          | Technology                              |
 | -------------- | --------------------------------------- |
-| Framework      | ASP.NET Core 10 (Web API)               |
-| Architecture   | Clean Architecture + CQRS (MediatR)     |
+| Framework      | ASP.NET Core 10 (Web API)               |
+| Architecture   | Clean Architecture + CQRS (MediatR)    |
 | ORM            | Entity Framework Core 9 (SQL Server)    |
-| Authentication | JWT Bearer*(planned)*                   |
-| Rendering      | PuppeteerSharp / Mermaid CLI*(planned)* |
-| Validation     | FluentValidation*(planned)*             |
+| Authentication | JWT Bearer                              |
+| Rendering      | Playwright (headless Chromium)          |
+| Validation     | FluentValidation                        |
 | API Docs       | Scalar (OpenAPI)                        |
 
 ---
@@ -37,47 +37,84 @@ src/
 graph LR
     Client(["🖥️ Client"])
 
-    subgraph Auth ["🔐 Auth (planned)"]
-        A1["POST /auth/login\nLogin → JWT"]
-        A2["POST /auth/refresh\nRefresh token"]
-        A3["POST /auth/logout\nRevoke token"]
+    subgraph Auth ["🔐 Auth"]
+        A1["POST /auth/register\nRegister user"]
+        A2["POST /auth/login\nLogin → JWT"]
+        A3["POST /auth/refresh\nRefresh token"]
+        A4["POST /auth/logout\nRevoke token"]
     end
 
     subgraph Users ["👤 Users"]
-        U1["POST /Users\nCreate user"]
-        U2["GET /Users\nList all users"]
-        U3["GET /Users/{id}\nGet user"]
-        U4["PUT /Users/{id}\nUpdate user"]
-        U5["DELETE /Users/{id}\nDelete user"]
+        U1["POST /users\nCreate user"]
+        U2["GET /users\nList all users"]
+        U3["GET /users/{id}\nGet user"]
+        U4["PUT /users/{id}\nUpdate user"]
+        U5["DELETE /users/{id}\nDelete user"]
+        U6["PATCH /users/{id}/email\nUpdate email"]
+        U7["PATCH /users/{id}/display-name\nUpdate display name"]
     end
 
     subgraph Documents ["📄 Documents"]
-        D1["POST /Documents\nCreate document"]
-        D2["GET /Documents/{id}\nGet document"]
-        D3["PUT /Documents/{id}\nUpdate document (planned)"]
-        D4["DELETE /Documents/{id}\nDelete document (planned)"]
+        D1["POST /documents\nCreate document"]
+        D2["GET /documents\nList user documents"]
+        D3["GET /documents/{id}\nGet document"]
+        D4["PUT /documents/{id}\nUpdate document"]
+        D5["DELETE /documents/{id}\nDelete document"]
+        D6["GET /documents/public\nGet public documents"]
+        D7["GET /documents/{id}/export?format=html\nExport document"]
     end
 
-    subgraph Mermaid ["🔷 Mermaid (planned)"]
+    subgraph Mermaid ["🔷 Mermaid"]
         M1["POST /mermaid/render\nRender → SVG"]
         M2["POST /mermaid/validate\nValidate syntax"]
         M3["POST /mermaid/export\nExport SVG / PNG"]
+        M4["GET /mermaid/themes\nList themes"]
     end
 
-    Client --> A1 & A2 & A3
-    Client --> U1 & U2 & U3 & U4 & U5
-    Client --> D1 & D2 & D3 & D4
-    Client --> M1 & M2 & M3
+    Client --> A1 & A2 & A3 & A4
+    Client --> U1 & U2 & U3 & U4 & U5 & U6 & U7
+    Client --> D1 & D2 & D3 & D4 & D5 & D6 & D7
+    Client --> M1 & M2 & M3 & M4
 
-    A1 -- "JWT token" --> U3
-    A1 -- "JWT token" --> D1 & D2 & D3 & D4
-    A1 -- "JWT token" --> M1 & M2 & M3
+    A2 -- "JWT token" --> U3 & D1 & D2 & D3 & D4 & D5
+    A2 -- "JWT token" --> M1 & M2 & M3
 
     U1 -- "creates" --> U3
     D1 -- "owned by" --> U3
     D2 -- "content fed to" --> M1
     M1 -- "cached SVG" --> D2
 ```
+
+---
+
+## Implemented Features
+
+### Authentication & Authorization
+- JWT Bearer token authentication with refresh token flow
+- PBKDF2 password hashing (SHA256, 100k iterations)
+- Token revocation on logout
+- Role-based authorization policies
+
+### Mermaid Rendering
+- Server-side rendering using Playwright (headless Chromium)
+- Support for both `application/json` and `text/plain` content types
+- SVG output with theme support
+- Syntax validation endpoint
+
+### Diagram Caching
+- SHA-256 hash-based caching of rendered SVGs
+- Configurable cache expiration
+- Reduces server load for repeated renders
+
+### Document Management
+- Full CRUD operations for documents
+- Public/private document visibility
+- Document ownership and access control
+
+### API Features
+- OpenAPI documentation via Scalar
+- FluentValidation request/response validation
+- ErrorOr pattern for consistent error responses
 
 ---
 
@@ -138,10 +175,12 @@ dotnet run --project src/MermaidFlow.Api --urls "http://localhost:5209"
 
 ## Roadmap
 
-- [ ] JWT authentication
-- [ ] Server-side Mermaid rendering (PuppeteerSharp)
-- [ ] Diagram caching (SHA-256 hash → SVG cache)
-- [ ] Document export (HTML / PDF via QuestPDF)
-- [ ] FluentValidation pipeline
+- [x] JWT authentication
+- [x] Server-side Mermaid rendering (Playwright)
+- [x] Diagram caching (SHA-256 hash → SVG cache)
+- [x] Document export (HTML)
+- [x] FluentValidation pipeline
 - [ ] Rate limiting on render endpoint
 - [ ] Unit & integration tests (xUnit + Moq)
+- [ ] PDF export
+- [ ] Real-time preview (SignalR)
