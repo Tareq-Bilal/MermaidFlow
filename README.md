@@ -6,15 +6,15 @@ A .NET backend for creating, managing, and rendering Mermaid diagram documents. 
 
 ## Tech Stack
 
-| Layer          | Technology                              |
-| -------------- | --------------------------------------- |
-| Framework      | ASP.NET Core 10 (Web API)               |
-| Architecture   | Clean Architecture + CQRS (MediatR)    |
-| ORM            | Entity Framework Core 9 (SQL Server)    |
-| Authentication | JWT Bearer                              |
-| Rendering      | Playwright (headless Chromium)          |
-| Validation     | FluentValidation                        |
-| API Docs       | Scalar (OpenAPI)                        |
+| Layer          | Technology                           |
+| -------------- | ------------------------------------ |
+| Framework      | ASP.NET Core 10 (Web API)            |
+| Architecture   | Clean Architecture + CQRS (MediatR)  |
+| ORM            | Entity Framework Core 9 (SQL Server) |
+| Authentication | JWT Bearer                           |
+| Rendering      | Playwright (headless Chromium)       |
+| Validation     | FluentValidation                     |
+| API Docs       | Scalar (OpenAPI)                     |
 
 ---
 
@@ -90,28 +90,33 @@ graph LR
 ## Implemented Features
 
 ### Authentication & Authorization
+
 - JWT Bearer token authentication with refresh token flow
 - PBKDF2 password hashing (SHA256, 100k iterations)
 - Token revocation on logout
 - Role-based authorization policies
 
 ### Mermaid Rendering
+
 - Server-side rendering using Playwright (headless Chromium)
 - Support for both `application/json` and `text/plain` content types
 - SVG output with theme support
 - Syntax validation endpoint
 
 ### Diagram Caching
+
 - SHA-256 hash-based caching of rendered SVGs
 - Configurable cache expiration
 - Reduces server load for repeated renders
 
 ### Document Management
+
 - Full CRUD operations for documents
 - Public/private document visibility
 - Document ownership and access control
 
 ### API Features
+
 - OpenAPI documentation via Scalar
 - FluentValidation request/response validation
 - ErrorOr pattern for consistent error responses
@@ -180,7 +185,5 @@ dotnet run --project src/MermaidFlow.Api --urls "http://localhost:5209"
 - [x] Diagram caching (SHA-256 hash → SVG cache)
 - [x] Document export (HTML)
 - [x] FluentValidation pipeline
-- [ ] Rate limiting on render endpoint
-- [ ] Unit & integration tests (xUnit + Moq)
-- [ ] PDF export
+- [x] Unit & integration tests (xUnit + Moq)
 - [ ] Real-time preview (SignalR)
