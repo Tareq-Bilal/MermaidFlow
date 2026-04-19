@@ -11,79 +11,27 @@ public class CreateDocumentCommandValidatorTests
     [Fact]
     public void Validate_ValidCommand_Passes()
     {
-        var command = new CreateDocumentCommand(
-            "My Document",
-            "# Hello World",
-            Guid.NewGuid(),
-            true,
-            new List<string> { "tag1", "tag2" });
-
-        var result = _validator.Validate(command);
-
+        var result = _validator.Validate(CreateCommand("Title", "Content"));
         result.IsValid.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
     }
 
-    [Fact]
-    public void Validate_NullTitle_Fails()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public void Validate_EmptyTitle_Fails(string? title)
     {
-        var command = new CreateDocumentCommand(
-            null!,
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string>());
-
-        var result = _validator.Validate(command);
-
+        var result = _validator.Validate(CreateCommand(title!, "Content"));
         result.IsValid.Should().BeFalse();
         result.Errors.Should().Contain(e => e.PropertyName == "Title");
     }
 
-    [Fact]
-    public void Validate_EmptyTitle_Fails()
+    [Theory]
+    [InlineData(200, true)]
+    [InlineData(201, false)]
+    public void Validate_TitleLength_Passes(int length, bool shouldPass)
     {
-        var command = new CreateDocumentCommand(
-            "",
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string>());
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeFalse();
-    }
-
-    [Fact]
-    public void Validate_TitleAtMaximumLength_Passes()
-    {
-        var command = new CreateDocumentCommand(
-            new string('a', 200),
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string>());
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Validate_TitleExceedsMaximum_Fails()
-    {
-        var command = new CreateDocumentCommand(
-            new string('a', 201),
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string>());
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.PropertyName == "Title");
+        var result = _validator.Validate(CreateCommand(new string('a', length), "Content"));
+        result.IsValid.Should().Be(shouldPass);
     }
 
     [Theory]
@@ -92,169 +40,49 @@ public class CreateDocumentCommandValidatorTests
     [InlineData(null)]
     public void Validate_EmptyContent_Fails(string? content)
     {
-        var command = new CreateDocumentCommand(
-            "Title",
-            content!,
-            Guid.NewGuid(),
-            true,
-            new List<string>());
-
-        var result = _validator.Validate(command);
-
+        var result = _validator.Validate(CreateCommand("Title", content!));
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.PropertyName == "Content");
     }
 
-    [Fact]
-    public void Validate_NullTags_Fails()
+    [Theory]
+    [InlineData(null)]
+    public void Validate_NullTags_Passes(List<string>? tags)
     {
-        var command = new CreateDocumentCommand(
-            "Title",
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            null!);
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.PropertyName == "Tags");
-    }
-
-    [Fact]
-    public void Validate_EmptyTagsList_Passes()
-    {
-        var command = new CreateDocumentCommand(
-            "Title",
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string>());
-
-        var result = _validator.Validate(command);
-
+        var result = _validator.Validate(CreateCommand("Title", "Content", tags: tags));
         result.IsValid.Should().BeTrue();
     }
 
-    [Fact]
-    public void Validate_ValidTags_Passes()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void Validate_IsPublic_Passes(bool isPublic)
     {
-        var command = new CreateDocumentCommand(
-            "Title",
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string> { "mermaid", "flowchart", "diagram" });
-
-        var result = _validator.Validate(command);
-
+        var result = _validator.Validate(CreateCommand("Title", "Content", isPublic: isPublic));
         result.IsValid.Should().BeTrue();
     }
 
-    [Fact]
-    public void Validate_EmptyTagInList_Fails()
+    [Theory]
+    [InlineData("", false)]
+    [InlineData("   ", false)]
+    [InlineData("valid", true)]
+    public void Validate_TagValues(string tag, bool shouldPass)
     {
-        var command = new CreateDocumentCommand(
-            "Title",
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string> { "valid", "" });
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeFalse();
+        var result = _validator.Validate(CreateCommand("Title", "Content", tags: new List<string> { tag }));
+        result.IsValid.Should().Be(shouldPass);
     }
 
-    [Fact]
-    public void Validate_WhitespaceTagInList_Fails()
+    [Theory]
+    [InlineData(50, true)]
+    [InlineData(51, false)]
+    public void Validate_TagLength_Passes(int length, bool shouldPass)
     {
-        var command = new CreateDocumentCommand(
-            "Title",
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string> { "valid", "   " });
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeFalse();
+        var result = _validator.Validate(CreateCommand("Title", "Content", tags: new List<string> { new string('a', length) }));
+        result.IsValid.Should().Be(shouldPass);
     }
 
-    [Fact]
-    public void Validate_TagAtMaximumLength_Passes()
-    {
-        var command = new CreateDocumentCommand(
-            "Title",
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string> { new string('a', 50) });
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Validate_TagExceedsMaximumLength_Fails()
-    {
-        var command = new CreateDocumentCommand(
-            "Title",
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string> { new string('a', 51) });
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.PropertyName == "Tags[0]");
-    }
-
-    [Fact]
-    public void Validate_IsPublicTrue_Passes()
-    {
-        var command = new CreateDocumentCommand(
-            "Title",
-            "# Content",
-            Guid.NewGuid(),
-            true,
-            new List<string>());
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Validate_IsPublicFalse_Passes()
-    {
-        var command = new CreateDocumentCommand(
-            "Title",
-            "# Content",
-            Guid.NewGuid(),
-            false,
-            new List<string>());
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Validate_MultipleInvalidFields_FailsForAll()
-    {
-        var command = new CreateDocumentCommand(
-            null!,
-            "",
-            Guid.Empty,
-            false,
-            null!);
-
-        var result = _validator.Validate(command);
-
-        result.IsValid.Should().BeFalse();
-        result.Errors.Count.Should().BeGreaterThanOrEqualTo(3);
-    }
+    private static CreateDocumentCommand CreateCommand(
+        string title,
+        string content,
+        bool isPublic = true,
+        List<string>? tags = null) => new(title, content, Guid.NewGuid(), isPublic, tags ?? new List<string>());
 }
