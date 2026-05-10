@@ -102,10 +102,4 @@ public class MermaidController : ControllerBase
             export => File(export.Data, export.ContentType, export.FileName),
             error => Problem(statusCode: StatusCodes.Status400BadRequest, detail: error.Description));
     }
-
-    [HttpGet("themes")]
-    public IActionResult GetThemes()
-    {
-        return Ok(MermaidConstants.AllowedThemes);
-    }
 }
